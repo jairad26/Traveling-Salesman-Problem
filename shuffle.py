@@ -5,23 +5,37 @@ import pythag
 import sys
 
 def shuffle_method(screen):
+    
+    #printing info on screen
+    printable_shortest_path = []
+    for i in config.shortest_path:
+        printable_shortest_path.append((i.x, i.y))
+    myFont = pygame.font.SysFont('arial', 14)
+ 
+    info_text2 = myFont.render("the shortest distance is :", False, config.white)
+    shortest_distance_text = myFont.render(str(config.shortest_distance), False, config.white)
+    
+    screen.blit(info_text2,(4,0))
+    screen.blit(shortest_distance_text,(4,14))
+    
+    
+    #actual shuffling and algorithm
     random.shuffle(config.points)
     config.dist = pythag.calculate_distance(config.points)
-    if config.dist < config.record_distance:
+    if config.dist < config.shortest_distance:
         config.count = 0
-        config.record_distance = config.dist
-        print("the smallest distance right now is : " + str(config.record_distance))
-        config.smallest_path = config.points.copy()
+        config.shortest_distance = config.dist
+        # print("the smallest distance right now is : " + str(config.shortest_distance))
+        config.shortest_path = config.points.copy()
     config.count += 1
-    for m in range(len(config.points)-1):
-        pygame.draw.line(screen, config.white, (config.points[m].x, config.points[m].y), (config.points[m+1].x, config.points[m+1].y), 2)
     
-    for m in range(len(config.smallest_path)-1):
-        pygame.draw.line(screen, config.green, (config.smallest_path[m].x, config.smallest_path[m].y), (config.smallest_path[m+1].x, config.smallest_path[m+1].y), 4)
+    
+    #drawing lines once algorithm runs
+    if not (config.count > 2500*config.number_of_points):
+        for m in range(len(config.points)-1):
+            pygame.draw.line(screen, config.white, (config.points[m].x, config.points[m].y), (config.points[m+1].x, config.points[m+1].y), 2)
+        
+    for m in range(len(config.shortest_path)-1):
+        pygame.draw.line(screen, config.green, (config.shortest_path[m].x, config.shortest_path[m].y), (config.shortest_path[m+1].x, config.shortest_path[m+1].y), 4)
 
-    pygame.display.update()
-    if(config.count > 2500*config.number_of_points): #no real end to this sol, so just set a random parameter to stop it
-        pygame.display.quit() 
-        pygame.quit()
-        print("the smallest distance is : ", config.record_distance)
-        sys.exit()
+    # pygame.display.update()
