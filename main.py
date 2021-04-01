@@ -3,6 +3,7 @@ import time
 import random
 import os
 import sys
+import pythag
 
 from points import Point
 
@@ -24,7 +25,7 @@ screen = pygame.display.set_mode((width, height))
 points = []
 offset_screen = 50
 smallest_path = []
-number_of_points = 30
+number_of_points = 10
 
 # Generate random points on screen
 for n in range(number_of_points):
@@ -40,19 +41,11 @@ def shuffle(a,b,c):
     a[b] = a[c]
     a[c] = temp
     
-# distance between point using pythagorean theorem
-def calculate_distance(points_list):
-    total = 0
-    for n in range(len(points)-1):
-        #distance formula
-        distance = ((points[n].x - points[n+1].x) ** 2 + (points[n].y - points[n+1].y) ** 2) ** 0.5
-        total += distance
-    return total
-
-dist = calculate_distance(points)
+#must set here and pass as parameters to function
+dist = pythag.calculate_distance(points)
 record_distance = dist
 
-smallest_path = points.copy()
+# smallest_path = points.copy()
 count = 0
 running = True
 while running:
@@ -61,30 +54,15 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             
-    # draw lines and points
-    
+    # draw points
     for n in range(len(points)):
         pygame.draw.circle(screen, white, (points[n].x, points[n].y), 10)
-        
-    a = random.randint(0, len(points)-1)
-    b = random.randint(0, len(points)-1)
-    shuffle(points, a, b)
-    dist = calculate_distance(points)
-    if dist < record_distance:
-        count = 0
-        record_distance = dist
-        print("the smallest distance right now is : " + str(record_distance))
-        smallest_path = points.copy()
-    count += 1
-        
-    for m in range(len(points)-1):
-        pygame.draw.line(screen, white, (points[m].x, points[m].y), (points[m+1].x, points[m+1].y), 2)
     
-    for m in range(len(smallest_path)-1):
-        pygame.draw.line(screen, green, (smallest_path[m].x, smallest_path[m].y), (smallest_path[m+1].x, smallest_path[m+1].y), 4)
+    #draw lines between points, record distance, current calcs, etc.
+    count, record_distance = pythag.output_vis(screen, points, dist, record_distance, count)
         
     pygame.display.update()
-    if(count > 5*pow(2,number_of_points)):
+    if(count > 5000*number_of_points):
         pygame.display.quit() 
         pygame.quit()
         print("the smallest distance is : ", record_distance)
