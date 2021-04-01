@@ -4,66 +4,49 @@ import random
 import os
 import sys
 import pythag
+import config
+import shuffle
 
-from points import Point
+from Points import Point
 
 
 os.environ["SDL_VIDEO_CENTERED"]='1'
-width, height = 500,500
 
-#colors
-black = (0,0,0)
-white = (255,255,255)
-green = (0,255,24)
 
 #pygame settings
 pygame.init()
 pygame.display.set_caption("Traveling Salesman Problem")
-screen = pygame.display.set_mode((width, height))
+screen = pygame.display.set_mode((config.width, config.height))
 
-#variables
-points = []
-offset_screen = 50
-smallest_path = []
-number_of_points = 10
 
 # Generate random points on screen
-for n in range(number_of_points):
-    x  = random.randint(offset_screen, width - offset_screen)
-    y = random.randint(offset_screen, height - offset_screen)
+for n in range(config.number_of_points):
+    x  = random.randint(config.offset_screen, config.width - config.offset_screen)
+    y = random.randint(config.offset_screen, config.height - config.offset_screen)
     
     point = Point(x,y)
-    points.append(point)
-    
-# shuffle points position in the list
-def shuffle(a,b,c):
-    temp = a[b]
-    a[b] = a[c]
-    a[c] = temp
-    
-#must set here and pass as parameters to function
-dist = pythag.calculate_distance(points)
-record_distance = dist
+    config.points.append(point)
 
-# smallest_path = points.copy()
-count = 0
+
+config.dist = pythag.calculate_distance(config.points)
+config.record_distance = config.dist
+
+config.smallest_path = config.points.copy()
+config.count = 0
 running = True
 while running:
-    screen.fill(black)
+    screen.fill(config.black)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
             
+            
     # draw points
-    for n in range(len(points)):
-        pygame.draw.circle(screen, white, (points[n].x, points[n].y), 10)
-    
-    #draw lines between points, record distance, current calcs, etc.
-    count, record_distance = pythag.output_vis(screen, points, dist, record_distance, count)
+    for n in range(len(config.points)):
+        pygame.draw.circle(screen, config.white, (config.points[n].x, config.points[n].y), 10)
         
-    pygame.display.update()
-    if(count > 5000*number_of_points):
-        pygame.display.quit() 
-        pygame.quit()
-        print("the smallest distance is : ", record_distance)
-        sys.exit()
+        
+    '''
+    this is where you call your algorithm
+    '''    
+    shuffle.shuffle_method(screen) #randomly shuffles points, pretty fast but you never know when to stop
