@@ -31,9 +31,11 @@ def shuffle_method(screen):
     
     
     #drawing lines once algorithm runs
-    if not (config.count > 2500*config.number_of_points):
+    if not (config.count > 500*config.number_of_points):
         for m in range(len(config.points)-1):
             pygame.draw.line(screen, config.white, (config.points[m].x, config.points[m].y), (config.points[m+1].x, config.points[m+1].y), 2)
+    else:
+        config.flag += 1
         
     for m in range(len(config.shortest_path)-1):
         pygame.draw.line(screen, config.green, (config.shortest_path[m].x, config.shortest_path[m].y), (config.shortest_path[m+1].x, config.shortest_path[m+1].y), 4)

@@ -19,7 +19,7 @@ pygame.init()
 pygame.display.set_caption("Traveling Salesman Problem")
 screen = pygame.display.set_mode((config.width, config.height))
 clock = pygame.time.Clock()
-
+start = time.time()
 
 # Generate random points on screen
 for n in range(config.number_of_points):
@@ -51,9 +51,13 @@ while running:
     '''
     this is where you call your algorithm
     '''    
-    # shuffle.shuffle_method(screen) #randomly shuffles points, pretty fast but you never know when to stop
-    heapsalgo.heapPermutationNonRecursive(screen, config.points, len(config.points))
+    # shuffle.shuffle_method(screen) #randomly shuffles points, looks cool but you never know when to stop
+    heapsalgo.heapPermutationNonRecursive(screen, config.points, len(config.points)) #EXTREMELY slow, especially with python :(
     
+    
+    end = time.time()
+    if(config.flag == 1):
+        print(f"Runtime of the program is: {end-start}")
     pygame.display.update()
 pygame.display.quit() 
 pygame.quit()
