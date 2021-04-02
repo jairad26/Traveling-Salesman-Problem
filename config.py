@@ -9,11 +9,15 @@ green = (0,255,24)
 points = []
 offset_screen = 50
 shortest_path = []
-number_of_points = 30
+number_of_points = 6
 count = 0
 dist = 0
 shortest_distance = dist
-number_of_points = 6
 offset_screen = 50
-fps = 15
+fps = 300
+flag = 0
+
+#heap's algorithm specific variables
+i = 0
+c = []
 
